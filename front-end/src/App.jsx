@@ -14,12 +14,11 @@ function App() {
   }, []);
   async function handleSubmit(e) {
     e.preventDefault(); //not refresh page
-    console.log("handleSubmit");
-    console.log(textRef.current.value);
+
     const todo = {
       text: textRef.current.value,
     };
-    setTodos([...todos, todo]);
+    console.log(todo, " todo ref");
     const response = await fetch("http://localhost:8080/api/todos", {
       method: "POST",
       body: JSON.stringify(todo),
@@ -27,8 +26,17 @@ function App() {
         "Content-type": "application/json",
       },
     });
-    console.log(response);
+    const todoDoc = await response.json();
+    setTodos([...todos, todoDoc]);
+    console.log(todoDoc);
   }
+  const handleDelete = async (id) => {
+    await fetch(`http://localhost:8080/api/todos/${id}`, {
+      method: "DELETE",
+    });
+    getTodos();
+  };
+
   return (
     <>
       <h1>Todos</h1>
@@ -38,7 +46,10 @@ function App() {
       </form>
       <ul>
         {todos.map((todo) => (
-          <li>{todo}</li>
+          <li key={todo._id}>
+            {todo.text}
+            <button onClick={() => handleDelete(todo._id)}>X</button>
+          </li>
         ))}
       </ul>
     </>
