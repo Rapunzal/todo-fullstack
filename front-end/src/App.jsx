@@ -1,11 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
 
+const BASE_URL = import.meta.env.VITE_API;
+
 function App() {
   const [todos, setTodos] = useState([]);
   const textRef = useRef();
   async function getTodos() {
-    const response = await fetch("http://localhost:8080/api/todos");
+    // const response = await fetch("http://localhost:8080/api/todos");
+    const response = await fetch(`${BASE_URL}/api/todos`);
     const result = await response.json();
     setTodos(result);
   }
@@ -19,7 +22,7 @@ function App() {
       text: textRef.current.value,
     };
     console.log(todo, " todo ref");
-    const response = await fetch("http://localhost:8080/api/todos", {
+    const response = await fetch(`${BASE_URL}/api/todos`, {
       method: "POST",
       body: JSON.stringify(todo),
       headers: {
@@ -31,7 +34,7 @@ function App() {
     console.log(todoDoc);
   }
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:8080/api/todos/${id}`, {
+    await fetch(`${BASE_URL}/api/todos/${id}`, {
       method: "DELETE",
     });
     getTodos();
@@ -39,7 +42,7 @@ function App() {
   const handleComplete = async (id) => {
     const currentTodo = todos.find((todo) => todo._id === id);
     currentTodo.completed = !currentTodo.completed;
-    await fetch(`http://localhost:8080/api/todos/${id}`, {
+    await fetch(`${BASE_URL}/api/todos/${id}`, {
       method: "PUT",
       body: JSON.stringify(currentTodo),
       headers: {
