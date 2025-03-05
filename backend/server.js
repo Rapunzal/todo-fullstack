@@ -42,6 +42,19 @@ app.delete("/api/todos/:id", async (req, res) => {
   }
 });
 
+app.put("/api/todos/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    console.log(req.body, " put");
+    const result = await Todo.findByIdAndUpdate(id, req.body, { new: true });
+    console.log(result);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Listening to port on ${port}`);
   connectDb();
