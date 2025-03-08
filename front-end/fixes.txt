@@ -1,2 +1,5 @@
 Fixing my bug
 second bug fixed
+third bug fixed
+fourth bug fixed
+fifth bug fixed
